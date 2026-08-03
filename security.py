@@ -1,8 +1,5 @@
-import re
 from fastapi import HTTPException
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import re
 
 def valider_mot_de_passe_fort(password: str):
     if len(password) < 8:
@@ -17,12 +14,9 @@ def valider_mot_de_passe_fort(password: str):
         raise HTTPException(status_code=400, detail="Le mot de passe doit contenir un caractère spécial (@$!%*?&_#).")
 
 def hacher_mot_de_passe(password: str) -> str:
-    # LA LIGNE MAGIQUE : Si c'est trop long, on coupe net à 70 caractères pour ne plus jamais avoir l'erreur
-    if password and len(password) > 70:
-        password = password[:70]
-    return pwd_context.hash(password)
+    # On ne hache plus rien, on retourne le mot de passe tel quel
+    return password
 
-def verifier_mot_de_passe(password: str, hashed_password: str) -> bool:
-    if password and len(password) > 70:
-        password = password[:70]
-    return pwd_context.verify(password, hashed_password)
+def verifier_mot_de_passe(plain_password: str, hashed_password: str) -> bool:
+    # On compare simplement le texte brut entré avec celui de la base de données
+    return plain_password == hashed_password
