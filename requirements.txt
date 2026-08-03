@@ -1,9 +1,6 @@
 fastapi
 uvicorn
-pydantic
-pydantic-settings
-email-validator
-passlib
-bcrypt
 jinja2
+pydantic
+email-validator
 starlette
