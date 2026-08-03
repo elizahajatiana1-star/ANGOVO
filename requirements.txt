@@ -4,3 +4,5 @@ jinja2
 pydantic
 email-validator
 starlette
+passlib
+bcrypt
