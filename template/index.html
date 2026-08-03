@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANGOVO — Système Intelligent JIRAMA</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+    
+    *{box-sizing:border-box;margin:0;padding:0;}
+    
+    :root{
+      --or:#E65100;--orl:#FF6D00;--orl2:#FFF3E0;
+      --gnm:#2E7D32;
+      --blk:#0D0D0D;
+      --wh:#FFFFFF;--wh2:#F9F8F6;
+      --t1:#111111;--t2:#555555;--t3:#999999;
+      --bdr:rgba(0,0,0,0.08);
+    }
+    
+    body{
+      font-family:'DM Sans',system-ui,sans-serif;
+      color:var(--t1);
+      background:var(--wh);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    
+    #ptc{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;}
+    .app-wrap{position:relative;z-index:2;}
+
+    /* NAV RESPONSIVE */
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px 40px;
+      background:rgba(255,255,255,0.95);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--bdr);
+      position:sticky;
+      top:0;
+    }
+    .nav-brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:inherit;
+    }
+    .logo-container{position:relative;width:38px;height:38px;}
+    .logo-container canvas{position:absolute;top:0;left:0;width:100%;height:100%;}
+    .brand-txt{display:flex;flex-direction:column;}
+    .brand-main{font-size:19px;font-weight:700;letter-spacing:-0.5px;color:var(--blk);}
+    .brand-sub{font-size:10px;font-family:'DM Mono',monospace;color:var(--gnm);font-weight:500;margin-top:-2px;}
+    
+    .nav-links{display:flex;align-items:center;gap:20px;}
+    .nav-links a{font-size:14px;font-weight:600;color:var(--t2);text-decoration:none;}
+    .nav-btn-connect{padding:8px 18px;border:1px solid var(--or);color:var(--or) !important;border-radius:6px;}
+
+    /* HERO RESPONSIVE */
+    .hero{
+      max-width:960px;
+      margin:80px auto 40px auto;
+      text-align:center;
+      padding:0 24px;
+    }
+    .hero-title{
+      font-size:clamp(32px, 5vw, 52px);
+      font-weight:700;
+      letter-spacing:-1.5px;
+      line-height:1.15;
+      color:var(--blk);
+      margin-bottom:24px;
+    }
+    .hero-title span{color:var(--or);}
+    .hero-subtitle{
+      font-size:clamp(15px, 2vw, 18px);
+      color:var(--t2);
+      line-height:1.6;
+      max-width:700px;
+      margin:0 auto 36px auto;
+    }
+    .hero-btn{
+      display:inline-block;
+      padding:16px 36px;
+      background:var(--or);
+      color:var(--wh);
+      font-size:15px;
+      font-weight:700;
+      text-decoration:none;
+      border-radius:8px;
+    }
+
+    /* GRID RESPONSIVE */
+    .features-section{max-width:1100px;margin:60px auto;padding:0 24px;}
+    .section-title{text-align:center;font-size:24px;font-weight:700;margin-bottom:40px;}
+    .features-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:24px;
+    }
+    .feat-card{background:var(--wh);border:1px solid var(--bdr);border-radius:12px;padding:28px;}
+    .feat-icon{font-size:24px;margin-bottom:16px;display:inline-block;}
+    .feat-title{font-size:16px;font-weight:700;margin-bottom:10px;}
+    .feat-desc{font-size:13.5px;color:var(--t2);line-height:1.6;}
+
+    @media (max-width: 600px) {
+      .nav{padding:12px 20px;}
+      .hero{margin:50px auto 30px auto;}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ptc"></canvas>
+  <div class="app-wrap">
+    <nav class="nav">
+      <a href="index.html" class="nav-brand">
+        <div class="logo-container"><canvas id="logoCanvas"></canvas></div>
+        <div class="brand-txt"><span class="brand-main">ANGOVO</span><span class="brand-sub">MADA ENERGY SMART</span></div>
+      </a>
+      <div class="nav-links">
+        <a href="inscription.html" style="display:none; @media(min-width:480px){display:inline;}">Créer compte</a>
+        <a href="connexion.html" class="nav-btn-connect">Connexion</a>
+      </div>
+    </nav>
+
+    <main class="hero">
+      <h1 class="hero-title">Prenez le contrôle de votre consommation avec <span>Angovo</span></h1>
+      <p class="hero-subtitle">Suivez les index de votre compteur JIRAMA en temps réel, anticipez les coûts de vos prochaines factures et maîtrisez votre budget.</p>
+      <a href="connexion.html" class="hero-btn">Accéder au Dashboard</a>
+    </main>
+
+    <section class="features-section">
+      <h2 class="section-title">Ce que notre système fait pour vous</h2>
+      <div class="features-grid">
+        <div class="feat-card">
+          <span class="feat-icon">📊</span>
+          <h3 class="feat-title">Suivi Analytique</h3>
+          <p class="feat-desc">Visualisez votre consommation mensuelle en kWh sous forme de graphiques épurés.</p>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">🧾</span>
+          <h3 class="feat-title">Règlement des Factures</h3>
+          <p class="feat-desc">Consultez l'historique et procédez instantanément à vos paiements mobiles sécurisés.</p>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">🤖</span>
+          <h3 class="feat-title">Assistant IA ZAVA</h3>
+          <p class="feat-desc">Disponible pour les membres Premium. Notre IA analyse vos relevés et anticipe les anomalies.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    (function() {
+      const cvs = document.getElementById('logoCanvas'); if(!cvs) return;
+      cvs.width = 76; cvs.height = 76; const ctx = cvs.getContext('2d');
+      ctx.strokeStyle = '#1B5E20'; ctx.lineWidth = 3.5; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(16,46,14,24); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(20,36,24,14); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(60,46,62,24); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(56,36,52,14); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(38,66); ctx.lineTo(38,10); ctx.stroke();
+      ctx.fillStyle = '#E65100'; ctx.beginPath(); ctx.moveTo(38,24); ctx.lineTo(45,36); ctx.lineTo(39,36); ctx.lineTo(41,48); ctx.lineTo(31,34); ctx.lineTo(37,34); ctx.closePath(); ctx.fill();
+    })();
+    (function() {
+      const C = document.getElementById('ptc'); if(!C) return;
+      const ctx = C.getContext('2d'); let W, H, pts;
+      function resize() { W = C.width = window.innerWidth; H = C.height = window.innerHeight; }
+      window.addEventListener('resize', resize); resize();
+      pts = Array.from({length: 20}, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, r: 1.5, c: Math.random() > 0.5 ? '#E65100' : '#2E7D32' }));
+      function loop() { ctx.clearRect(0, 0, W, H); pts.forEach(p => { p.x += p.vx; p.y += p.vy; if(p.x<0||p.x>W) p.vx*=-1; if(p.y<0||p.y>H) p.vy*=-1; ctx.beginPath(); ctx.fillStyle = p.c; ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); }); requestAnimationFrame(loop); }
+      loop();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANGOVO — Plans & Abonnements</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+    *[x-cloak] { display: none !important; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --or:#E65100;--orl:#FF6D00;--orl2:#FFF3E0;
+      --gnm:#2E7D32;--gnl:#E8F5E9;
+      --blk:#0D0D0D;
+      --wh:#FFFFFF;--wh2:#F9F8F6;
+      --t1:#111111;--t2:#555555;--t3:#999999;
+      --bdr:rgba(0,0,0,0.08);
+    }
+    body{font-family:'DM Sans',system-ui,sans-serif;color:var(--t1);background:var(--wh2);min-height:100vh;}
+    
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 36px;background:var(--wh);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;}
+    .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+    .logo-badge {width: 36px; height: 36px; background: linear-gradient(135deg, #2E7D32 0%, #E65100 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;}
+    .logo-badge svg { width: 22px; height: 22px; fill: #FFFFFF; }
+    .brand-txt{display:flex;flex-direction:column;}
+    .brand-main{font-size:18px;font-weight:800;color:var(--blk);letter-spacing:0.5px;}
+    .brand-sub{font-size:8.5px;color:var(--gnm);font-weight:700;letter-spacing:0.5px;}
+
+    /* Menu desktop */
+    .nav-menu{display:flex;gap:4px;background:var(--wh2);padding:4px;border-radius:10px;border:1px solid var(--bdr);}
+    .nav-btn{background:none;border:none;padding:8px 16px;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;border-radius:7px;text-decoration:none;transition:all 0.2s;}
+    .nav-btn:hover{color:var(--t1);background:rgba(0,0,0,0.03);}
+    .nav-btn.active{color:var(--blk);background:var(--wh);font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+
+    .nav-right{display:flex;align-items:center;gap:14px;}
+    .user-avatar{width:34px;height:34px;background:var(--or);color:var(--wh);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+    
+    .logout-btn{background:none;border:1px solid var(--bdr);color:#c62828;font-size:13px;font-weight:600;cursor:pointer;padding:6px 14px;border-radius:8px;transition:0.2s;}
+    .logout-btn:hover{background:#ffebee;border-color:transparent;}
+
+    .mobile-logout-btn { display: none; }
+    .hamburger-btn { display: none; background: none; border: 1px solid var(--bdr); padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 18px; }
+
+    .container{max-width:900px;margin:30px auto;padding:0 24px;}
+    .view-title{font-size:24px;font-weight:700;margin-bottom:8px;color:var(--blk);text-align:center;}
+    .view-desc{font-size:14px;color:var(--t2);margin-bottom:30px;text-align:center;}
+
+    /* Grille des plans (2 colonnes) */
+    .plans-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:24px;}
+    .plan-card{background:var(--wh);border:1px solid var(--bdr);border-radius:14px;padding:28px;display:flex;flex-direction:column;position:relative;transition:all 0.2s;}
+    .plan-card.popular{border-color:var(--or);box-shadow:0 8px 24px rgba(230,81,0,0.1);background:var(--wh);}
+    .popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--or);color:var(--wh);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;}
+
+    .plan-name{font-size:18px;font-weight:700;color:var(--blk);margin-bottom:8px;}
+    .plan-price{font-size:24px;font-weight:800;color:var(--or);margin-bottom:16px;}
+    .plan-price span{font-size:12px;color:var(--t3);font-weight:400;}
+    .plan-desc{font-size:13.5px;color:var(--t2);margin-bottom:20px;line-height:1.4;}
+
+    .plan-features{list-style:none;margin-bottom:24px;flex:1;display:flex;flex-direction:column;gap:10px;}
+    .plan-features li{font-size:13px;color:var(--t1);display:flex;align-items:center;gap:8px;}
+    .plan-features li::before{content:"✔";color:var(--gnm);font-weight:bold;}
+
+    .btn-plan{width:100%;padding:12px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid var(--bdr);transition:background 0.2s;}
+    .btn-plan.current{background:var(--gnl);color:var(--gnm);border-color:#C8E6C9;cursor:default;}
+    .btn-plan.select{background:var(--wh);color:var(--blk);}
+    .btn-plan.select:hover{background:var(--wh2);}
+    .btn-plan.primary{background:var(--or);color:var(--wh);border-color:var(--or);}
+    .btn-plan.primary:hover{background:var(--orl);}
+
+    @media (max-width: 768px) {
+      .nav{padding:14px 18px;}
+      .hamburger-btn { display: block; }
+      .nav-menu {
+        display: none; position: absolute; top: 70px; left: 0; width: 100%;
+        background: var(--wh); flex-direction: column; padding: 16px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-top: 1px solid var(--bdr); gap: 8px;
+      }
+      .nav-menu.open { display: flex; }
+      .nav-menu .nav-btn { width: 100%; text-align: left; padding: 12px 16px; }
+      
+      .logout-btn { display: none; }
+      .mobile-logout-btn {
+        display: block; width: 100%; background: #ffebee; border: none;
+        color: #c62828; font-size: 14px; font-weight: 700; cursor: pointer;
+        padding: 12px 16px; border-radius: 8px; text-align: left; margin-top: 8px;
+      }
+      .plans-grid{grid-template-columns:1fr;}
+    }
+  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="planApp" x-cloak>
+
+  <nav class="nav">
+    <a href="dashboard.html" class="nav-brand">
+      <div class="logo-badge"><svg viewBox="0 0 24 24"><path d="M13,2L3,14H11V22L21,10H13V2Z"/></svg></div>
+      <div class="brand-txt"><span class="brand-main">ANGOVO</span><span class="brand-sub">L'ÉNERGIE À PORTÉE DE MAIN</span></div>
+    </a>
+    
+    <button class="hamburger-btn" @click="menuOpen = !menuOpen">☰</button>
+
+    <div class="nav-menu" :class="{'open': menuOpen}">
+      <a href="dashboard.html" class="nav-btn">Tableau de bord</a>
+      <a href="facture.html" class="nav-btn">Factures</a>
+      <a href="consommation.html" class="nav-btn">Consommation</a>
+      <a href="paiement.html" class="nav-btn">Paiement</a>
+      <a href="conseil.html" class="nav-btn">Conseils</a>
+      <a href="plan.html" class="nav-btn active">Plans</a>
+      <a href="profil.html" class="nav-btn">Profil</a>
+      
+      <button @click="logout()" class="mobile-logout-btn">Déconnexion</button>
+    </div>
+
+    <div class="nav-right">
+      <div class="user-avatar">U</div>
+      <button @click="logout()" class="logout-btn">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="view-title">Choisissez votre formule</h2>
+    <p class="view-desc">Passez au niveau supérieur pour débloquer l'assistance IA et optimiser votre consommation.</p>
+
+    <div class="plans-grid">
+      
+      <div class="plan-card">
+        <div class="plan-name">Gratuit</div>
+        <div class="plan-price">0 Ar <span>/ mois</span></div>
+        <div class="plan-desc">Pour un suivi basique de vos factures et de votre compteur.</div>
+        <ul class="plan-features">
+          <li>Suivi de consommation de base</li>
+          <li>Accès aux factures mensuelles</li>
+          <li>Conseils énergétiques standards</li>
+          <li>Support par email</li>
+        </ul>
+        <button class="btn-plan" :class="currentPlan === 'Gratuit' ? 'current' : 'select'" @click="changerPlan('Gratuit')" x-text="currentPlan === 'Gratuit' ? 'Plan Actuel' : 'Choisir ce plan'"></button>
+      </div>
+
+      <div class="plan-card popular">
+        <div class="popular-badge">Recommandé & IA</div>
+        <div class="plan-name">Premium</div>
+        <div class="plan-price">3 000 Ar <span>/ mois</span></div>
+        <div class="plan-desc">Pour une maîtrise totale et l'accès exclusif à l'Assistant IA Intelligent.</div>
+        <ul class="plan-features">
+          <li>Toutes les fonctionnalités Gratuit</li>
+          <li><strong>Assistance IA illimitée activée</strong></li>
+          <li>Analyses et prédictions sur-mesure</li>
+          <li>Support prioritaire 7j/7</li>
+        </ul>
+        <button class="btn-plan" :class="currentPlan === 'Premium' ? 'current' : 'primary'" @click="changerPlan('Premium')" x-text="currentPlan === 'Premium' ? 'Plan Actuel' : 'Passer à Premium'"></button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('planApp', () => ({
+        menuOpen: false,
+        currentPlan: 'Gratuit',
+
+        init() {
+          if (!localStorage.getItem('angovo_user_id')) {
+            window.location.replace('connexion.html');
+            return;
+          }
+
+          const savedPlan = localStorage.getItem('angovo_user_plan');
+          if (savedPlan) {
+            this.currentPlan = savedPlan;
+          }
+        },
+
+        changerPlan(nomPlan) {
+          this.currentPlan = nomPlan;
+          localStorage.setItem('angovo_user_plan', nomPlan);
+          alert('Votre abonnement a été mis à jour : Plan ' + nomPlan);
+        },
+
+        logout() {
+          localStorage.removeItem('angovo_user_id');
+          window.location.replace('connexion.html');
+        }
+      }));
+    });
+  </script>
+</body>
+</html>

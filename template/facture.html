@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANGOVO — Factures</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+    *[x-cloak] { display: none !important; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --or:#E65100;--orl:#FF6D00;--orl2:#FFF3E0;
+      --gnm:#2E7D32;--gnl:#E8F5E9;
+      --blk:#0D0D0D;
+      --wh:#FFFFFF;--wh2:#F9F8F6;
+      --t1:#111111;--t2:#555555;--t3:#999999;
+      --bdr:rgba(0,0,0,0.08);
+    }
+    body{font-family:'DM Sans',system-ui,sans-serif;color:var(--t1);background:var(--wh2);min-height:100vh;}
+    
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 36px;background:var(--wh);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;}
+    .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+    .logo-badge {width: 36px; height: 36px; background: linear-gradient(135deg, #2E7D32 0%, #E65100 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;}
+    .logo-badge svg { width: 22px; height: 22px; fill: #FFFFFF; }
+    .brand-txt{display:flex;flex-direction:column;}
+    .brand-main{font-size:18px;font-weight:800;color:var(--blk);letter-spacing:0.5px;}
+    .brand-sub{font-size:8.5px;color:var(--gnm);font-weight:700;letter-spacing:0.5px;}
+
+    /* Menu desktop */
+    .nav-menu{display:flex;gap:4px;background:var(--wh2);padding:4px;border-radius:10px;border:1px solid var(--bdr);}
+    .nav-btn{background:none;border:none;padding:8px 16px;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;border-radius:7px;text-decoration:none;transition:all 0.2s;}
+    .nav-btn:hover{color:var(--t1);background:rgba(0,0,0,0.03);}
+    .nav-btn.active{color:var(--blk);background:var(--wh);font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+
+    .nav-right{display:flex;align-items:center;gap:14px;}
+    .user-avatar{width:34px;height:34px;background:var(--or);color:var(--wh);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+    
+    .logout-btn{background:none;border:1px solid var(--bdr);color:#c62828;font-size:13px;font-weight:600;cursor:pointer;padding:6px 14px;border-radius:8px;transition:0.2s;}
+    .logout-btn:hover{background:#ffebee;border-color:transparent;}
+
+    .mobile-logout-btn { display: none; }
+    .hamburger-btn { display: none; background: none; border: 1px solid var(--bdr); padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 18px; }
+
+    .container{max-width:1240px;margin:30px auto;padding:0 24px;}
+    .view-title{font-size:24px;font-weight:700;margin-bottom:20px;color:var(--blk);}
+
+    /* Boutons de filtre */
+    .filter-container{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;}
+    .filter-btn{
+      padding:10px 20px;background:var(--wh);border:1px solid var(--bdr);border-radius:10px;
+      font-size:13.5px;font-weight:700;color:var(--t2);cursor:pointer;transition:all 0.2s;
+    }
+    .filter-btn.active{background:var(--or);color:var(--wh);border-color:var(--or);box-shadow:0 4px 12px rgba(230,81,0,0.2);}
+    .filter-btn:hover:not(.active){background:var(--wh2);color:var(--blk);}
+
+    /* Tableau des factures */
+    .card{background:var(--wh);border:1px solid var(--bdr);border-radius:14px;padding:24px;overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;text-align:left;font-size:13.5px;}
+    th{background:var(--wh2);color:var(--t3);font-size:11px;font-weight:700;text-transform:uppercase;padding:14px 16px;border-bottom:1px solid var(--bdr);}
+    td{padding:16px;border-bottom:1px solid var(--bdr);color:var(--t1);font-weight:500;vertical-align:middle;}
+    tr:last-child td{border-bottom:none;}
+
+    /* Badges de statut */
+    .badge-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11.5px;font-weight:700;}
+    .status-attente{background:#FFF8E1;color:#F57C00;}
+    .status-payee{background:var(--gnl);color:var(--gnm);}
+    .status-retard{background:#FFEBEE;color:#C62828;}
+
+    /* Boutons d'action */
+    .btn-action-payer{background:var(--or);color:var(--wh);border:none;padding:6px 14px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;}
+    .btn-action-payer:hover{background:var(--orl);}
+    .btn-action-pdf{background:var(--wh2);color:var(--t1);border:1px solid var(--bdr);padding:6px 14px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;}
+    .btn-action-pdf:hover{background:#eee;}
+
+    @media (max-width: 768px) {
+      .nav{padding:14px 18px;}
+      .hamburger-btn { display: block; }
+      .nav-menu {
+        display: none; position: absolute; top: 70px; left: 0; width: 100%;
+        background: var(--wh); flex-direction: column; padding: 16px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-top: 1px solid var(--bdr); gap: 8px;
+      }
+      .nav-menu.open { display: flex; }
+      .nav-menu .nav-btn { width: 100%; text-align: left; padding: 12px 16px; }
+      
+      .logout-btn { display: none; }
+      .mobile-logout-btn {
+        display: block; width: 100%; background: #ffebee; border: none;
+        color: #c62828; font-size: 14px; font-weight: 700; cursor: pointer;
+        padding: 12px 16px; border-radius: 8px; text-align: left; margin-top: 8px;
+      }
+      .filter-btn { flex: 1; text-align: center; }
+    }
+  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="factureApp" x-cloak>
+
+  <nav class="nav">
+    <a href="dashboard.html" class="nav-brand">
+      <div class="logo-badge"><svg viewBox="0 0 24 24"><path d="M13,2L3,14H11V22L21,10H13V2Z"/></svg></div>
+      <div class="brand-txt"><span class="brand-main">ANGOVO</span><span class="brand-sub">L'ÉNERGIE À PORTÉE DE MAIN</span></div>
+    </a>
+    
+    <button class="hamburger-btn" @click="menuOpen = !menuOpen">☰</button>
+
+    <div class="nav-menu" :class="{'open': menuOpen}">
+      <a href="dashboard.html" class="nav-btn">Tableau de bord</a>
+      <a href="facture.html" class="nav-btn active">Factures</a>
+      <a href="consommation.html" class="nav-btn">Consommation</a>
+      <a href="paiement.html" class="nav-btn">Paiement</a>
+      <a href="conseil.html" class="nav-btn">Conseils</a>
+      <a href="plan.html" class="nav-btn">Plans</a>
+      <a href="profil.html" class="nav-btn">Profil</a>
+      
+      <button @click="logout()" class="mobile-logout-btn">Déconnexion</button>
+    </div>
+
+    <div class="nav-right">
+      <div class="user-avatar">U</div>
+      <button @click="logout()" class="logout-btn">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="view-title">Gestion des Factures</h2>
+
+    <div class="filter-container">
+      <button class="filter-btn" :class="{'active': filtre === 'toutes'}" @click="filtre = 'toutes'">Toutes</button>
+      <button class="filter-btn" :class="{'active': filtre === 'payees'}" @click="filtre = 'payees'">Payées</button>
+      <button class="filter-btn" :class="{'active': filtre === 'attente'}" @click="filtre = 'attente'">En attente</button>
+      <button class="filter-btn" :class="{'active': filtre === 'retard'}" @click="filtre = 'retard'">Retard</button>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Mois</th>
+            <th>N° Facture</th>
+            <th>Idx. Deb</th>
+            <th>Idx. Fin</th>
+            <th>KWh</th>
+            <th>Montant</th>
+            <th>Statut</th>
+            <th>Échéance</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="f in facturesFiltrees">
+            <tr>
+              <td x-text="f.mois" style="font-weight:700;"></td>
+              <td x-text="f.ref" style="font-family:'DM Mono',monospace; font-size:12px; color:var(--t2);"></td>
+              <td x-text="f.idxDeb"></td>
+              <td x-text="f.idxFin"></td>
+              <td x-text="f.kwh + ' kWh'"></td>
+              <td x-text="f.montant + ' Ar'" style="font-weight:700;"></td>
+              <td>
+                <span class="badge-status" 
+                      :class="{
+                        'status-attente': getStatutReel(f) === 'En attente',
+                        'status-payee': getStatutReel(f) === 'Payée',
+                        'status-retard': getStatutReel(f) === 'Retard payé'
+                      }" 
+                      x-text="'● ' + getStatutReel(f)">
+                </span>
+              </td>
+              <td x-text="f.echeance"></td>
+              <td>
+                <button class="btn-action-payer" x-show="getStatutReel(f) === 'En attente'" @click="window.location.href='paiement.html'">Payer</button>
+                <button class="btn-action-pdf" x-show="getStatutReel(f) !== 'En attente'">PDF</button>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('factureApp', () => ({
+        menuOpen: false,
+        filtre: 'toutes',
+        facturePayee: false,
+        listeFactures: [
+          { mois: "Mai 2025", ref: "FAC-2025-05-1042", idxDeb: 4945, idxFin: 5132, kwh: 187, montant: "48 200", statut: "En attente", echeance: "30/06/2025" },
+          { mois: "Avril 2025", ref: "FAC-2025-04-1042", idxDeb: 4780, idxFin: 4945, kwh: 165, montant: "42 570", statut: "Payée", echeance: "31/05/2025" },
+          { mois: "Mars 2025", ref: "FAC-2025-03-1042", idxDeb: 4626, idxFin: 4780, kwh: 154, montant: "39 732", statut: "Payée", echeance: "30/04/2025" },
+          { mois: "Février 2025", ref: "FAC-2025-02-1042", idxDeb: 4482, idxFin: 4626, kwh: 144, montant: "37 152", statut: "Retard payé", echeance: "31/03/2025" },
+          { mois: "Janvier 2025", ref: "FAC-2025-01-1042", idxDeb: 4340, idxFin: 4482, kwh: 142, montant: "36 636", statut: "Payée", echeance: "28/02/2025" },
+          { mois: "Déc. 2024", ref: "FAC-2024-12-1042", idxDeb: 4210, idxFin: 4340, kwh: 130, montant: "33 540", statut: "Payée", echeance: "31/01/2025" }
+        ],
+        
+        getStatutReel(f) {
+          // Si c'est la facture de mai et qu'on a payé, on force le statut à "Payée"
+          if (f.mois.includes('Mai') && this.facturePayee) {
+            return 'Payée';
+          }
+          return f.statut;
+        },
+
+        get facturesFiltrees() {
+          return this.listeFactures.filter(f => {
+            const statutActuel = this.getStatutReel(f);
+            if (this.filtre === 'payees') return statutActuel === 'Payée';
+            if (this.filtre === 'attente') return statutActuel === 'En attente';
+            if (this.filtre === 'retard') return statutActuel === 'Retard payé';
+            return true;
+          });
+        },
+
+        init() {
+          if (!localStorage.getItem('angovo_user_id')) {
+            window.location.replace('connexion.html');
+            return;
+          }
+
+          // Vérifier si le paiement a été effectué
+          if (localStorage.getItem('angovo_facture_payee') === 'true') {
+            this.facturePayee = true;
+          }
+        },
+
+        logout() {
+          localStorage.removeItem('angovo_user_id');
+          window.location.replace('connexion.html');
+        }
+      }));
+    });
+  </script>
+</body>
+</html>

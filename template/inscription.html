@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANGOVO — Inscription</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{--or:#E65100;--orl:#FF6D00;--orl2:#FFF3E0;--gnm:#2E7D32;--blk:#0D0D0D;--wh:#FFFFFF;--wh2:#F9F8F6;--t1:#111111;--t2:#555555;--t3:#999999;--bdr:rgba(0,0,0,0.08);}
+    body{font-family:'DM Sans',sans-serif;color:var(--t1);background:var(--wh);min-height:100vh;overflow-x:hidden;}
+    #ptc{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;}
+    .app-wrap{position:relative;z-index:2;}
+    .nav{display:flex;align-items:center;padding:16px 24px;background:rgba(255,255,255,0.95);border-bottom:1px solid var(--bdr);}
+    .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+    .logo-container{position:relative;width:38px;height:38px;}
+    .logo-container canvas{position:absolute;width:100%;height:100%;}
+    .brand-txt{display:flex;flex-direction:column;}
+    .brand-main{font-size:19px;font-weight:700;color:var(--blk);}
+    .brand-sub{font-size:10px;color:var(--gnm);margin-top:-2px;}
+    
+    .reg-container{max-width:1060px;margin:40px auto;padding:0 16px;width:100%;}
+    .reg-box{background:var(--wh);border:1px solid var(--bdr);border-radius:16px;padding:30px 20px;}
+    .reg-title{font-size:26px;font-weight:700;margin-bottom:8px;text-align:center;}
+    .reg-subtitle{font-size:14px;color:var(--t2);text-align:center;margin-bottom:32px;}
+    
+    /* GRILLE TOTALEMENT RESPONSIVE : 3 COLONNES SUR PC, 1 COLONNE SUR MOBILE */
+    .reg-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:32px;}
+    .reg-col-title{font-size:13px;font-weight:700;color:var(--or);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;padding-bottom:6px;border-bottom:2px solid var(--orl2);font-style:italic;}
+    .f-group{margin-bottom:16px;}
+    .f-input{width:100%;padding:11px;font-size:14px;border:1px solid #dcdad4;border-radius:8px;background:var(--wh2);outline:none;}
+    .f-input:focus{border-color:var(--or);background:var(--wh);}
+    .f-btn{padding:13px 36px;background:var(--or);border:none;border-radius:8px;color:var(--wh);font-size:14px;font-weight:700;cursor:pointer;}
+    
+    .footer-actions{margin-top:32px;border-top:1px solid var(--bdr);padding-top:20px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:16px;align-items:center;}
+  </style>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="registerApp()" x-init="init()">
+  <canvas id="ptc"></canvas>
+  <div class="app-wrap">
+    <nav class="nav"><a href="index.html" class="nav-brand"><div class="logo-container"><canvas id="logoCanvas"></canvas></div><div class="brand-txt"><span class="brand-main">ANGOVO</span><span class="brand-sub">MADA ENERGY SMART</span></div></a></nav>
+    <main class="reg-container">
+      <div class="reg-box">
+        <h2 class="reg-title">Inscription Nouvel Utilisateur</h2>
+        <p class="reg-subtitle">Remplissez vos informations pour initialiser vos accès.</p>
+        <form @submit.prevent="submitRegister()">
+          <div class="reg-grid">
+            <div>
+              <div class="reg-col-title">Identité</div>
+              <div class="f-group"><input type="text" placeholder="Nom" x-model="nom" required class="f-input"></div>
+              <div class="f-group"><input type="text" placeholder="Prénom" x-model="prenom" required class="f-input"></div>
+              <div class="f-group"><input type="email" placeholder="Email" x-model="email" required class="f-input"></div>
+              <div class="f-group"><input type="password" placeholder="Mot de passe" x-model="password" required class="f-input"></div>
+            </div>
+            <div>
+              <div class="reg-col-title">Contact & Lieu</div>
+              <div class="f-group"><input type="text" placeholder="Téléphone" x-model="telephone" required class="f-input"></div>
+              <div class="f-group"><input type="date" x-model="date_naissance" class="f-input"></div>
+              <div class="f-group"><input type="text" placeholder="Ville" x-model="ville" required class="f-input"></div>
+              <div class="f-group"><input type="text" placeholder="Quartier" x-model="quartier" required class="f-input"></div>
+              <div class="f-group"><input type="text" placeholder="Adresse exacte" x-model="adresse_exacte" required class="f-input"></div>
+            </div>
+            <div>
+              <div class="reg-col-title">Services JIRAMA</div>
+              <div class="f-group"><input type="text" placeholder="N° Compteur JIRAMA" x-model="num_compteur" required class="f-input"></div>
+              <div class="f-group"><select x-model="type_abonnement" class="f-input"><option value="Domestique">Domestique (Tarif 14)</option><option value="Professionnel">Professionnel</option></select></div>
+              <div class="f-group"><select x-model="plan" class="f-input"><option value="Gratuit">Plan Gratuit</option><option value="Premium">Plan Premium</option></select></div>
+              <div class="f-group"><input type="number" placeholder="Limite kWh souhaitée" x-model="choix_kwh_base" required class="f-input"></div>
+            </div>
+          </div>
+          <div class="footer-actions">
+            <a href="connexion.html" style="color:var(--t3); font-size:14px; font-weight:600; text-decoration:none;">Annuler et se connecter</a>
+            <button type="submit" class="f-btn">Finaliser l'inscription</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+  <script>
+    function registerApp() {
+      return {
+        nom: '', prenom: '', email: '', password: '', telephone: '', date_naissance: '', ville: '', quartier: '', adresse_exacte: '', num_compteur: '', type_abonnement: 'Domestique', plan: 'Gratuit', choix_kwh_base: 0,
+        init() { initLogo(); initParticles(); },
+        submitRegister() {
+          const payload = { nom: this.nom, prenom: this.prenom, email: this.email, password: this.password, telephone: this.telephone, date_naissance: this.date_naissance || null, ville: this.ville, quartier: this.quartier, adresse_exacte: this.adresse_exacte, num_compteur: this.num_compteur, type_abonnement: this.type_abonnement, plan: this.plan, choix_kwh_base: parseInt(this.choix_kwh_base) || 0 };
+          fetch('http://127.0.0.1:8000/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+          .then(async res => { const data = await res.json(); if (!res.ok) throw data; return data; })
+          .then(() => { alert("Votre compte a été créé avec succès ! Connectez-vous."); window.location.href = 'connexion.html'; })
+          .catch(err => { alert("Erreur d'inscription : " + (err.detail || "Veuillez vérifier les champs.")); });
+        }
+      }
+    }
+    function initLogo() { const cvs = document.getElementById('logoCanvas'); if(!cvs) return; cvs.width = 76; cvs.height = 76; const ctx = cvs.getContext('2d'); ctx.strokeStyle = '#1B5E20'; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(16,46,14,24); ctx.stroke(); ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(20,36,24,14); ctx.stroke(); ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(60,46,62,24); ctx.stroke(); ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(56,36,52,14); ctx.stroke(); ctx.beginPath(); ctx.moveTo(38,66); ctx.lineTo(38,10); ctx.stroke(); ctx.fillStyle = '#E65100'; ctx.beginPath(); ctx.moveTo(38,24); ctx.lineTo(45,36); ctx.lineTo(39,36); ctx.lineTo(41,48); ctx.lineTo(31,34); ctx.lineTo(37,34); ctx.closePath(); ctx.fill(); }
+    function initParticles() { const C = document.getElementById('ptc'); if(!C) return; const ctx = C.getContext('2d'); let W, H, pts; function resize() { W = C.width = window.innerWidth; H = C.height = window.innerHeight; } window.addEventListener('resize', resize); resize(); pts = Array.from({length: 20}, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, r: 1.5, c: Math.random() > 0.5 ? '#E65100' : '#2E7D32' })); function loop() { ctx.clearRect(0, 0, W, H); pts.forEach(p => { p.x += p.vx; p.y += p.vy; if(p.x < 0 || p.x > W) p.vx *= -1; if(p.y < 0 || p.y > H) p.vy *= -1; ctx.beginPath(); ctx.fillStyle = p.c; ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); requestAnimationFrame(loop); } loop(); }
+  </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANGOVO — Mon Profil</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+    *[x-cloak] { display: none !important; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --or:#E65100;--orl:#FF6D00;--orl2:#FFF3E0;
+      --gnm:#2E7D32;--gnl:#E8F5E9;
+      --blk:#0D0D0D;
+      --wh:#FFFFFF;--wh2:#F9F8F6;
+      --t1:#111111;--t2:#555555;--t3:#999999;
+      --bdr:rgba(0,0,0,0.08);
+    }
+    body{font-family:'DM Sans',system-ui,sans-serif;color:var(--t1);background:var(--wh2);min-height:100vh;}
+    
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 36px;background:var(--wh);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;}
+    .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+    .logo-badge {width: 36px; height: 36px; background: linear-gradient(135deg, #2E7D32 0%, #E65100 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;}
+    .logo-badge svg { width: 22px; height: 22px; fill: #FFFFFF; }
+    .brand-txt{display:flex;flex-direction:column;}
+    .brand-main{font-size:18px;font-weight:800;color:var(--blk);letter-spacing:0.5px;}
+    .brand-sub{font-size:8.5px;color:var(--gnm);font-weight:700;letter-spacing:0.5px;}
+
+    .nav-menu{display:flex;gap:4px;background:var(--wh2);padding:4px;border-radius:10px;border:1px solid var(--bdr);}
+    .nav-btn{background:none;border:none;padding:8px 16px;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;border-radius:7px;text-decoration:none;transition:all 0.2s;}
+    .nav-btn:hover{color:var(--t1);background:rgba(0,0,0,0.03);}
+    .nav-btn.active{color:var(--blk);background:var(--wh);font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+
+    .nav-right{display:flex;align-items:center;gap:14px;}
+    .user-avatar{width:34px;height:34px;background:var(--or);color:var(--wh);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+    
+    .logout-btn{background:none;border:1px solid var(--bdr);color:#c62828;font-size:13px;font-weight:600;cursor:pointer;padding:6px 14px;border-radius:8px;transition:0.2s;}
+    .logout-btn:hover{background:#ffebee;border-color:transparent;}
+
+    .mobile-logout-btn { display: none; }
+    .hamburger-btn { display: none; background: none; border: 1px solid var(--bdr); padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 18px; }
+
+    .container{max-width:800px;margin:30px auto;padding:0 24px;}
+    .view-title{font-size:24px;font-weight:700;margin-bottom:24px;color:var(--blk);}
+
+    .card{background:var(--wh);border:1px solid var(--bdr);border-radius:14px;padding:30px;margin-bottom:24px;}
+    .card-title{font-size:16px;font-weight:700;color:var(--blk);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+
+    .form-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:16px;margin-bottom:20px;}
+    .form-group{margin-bottom:16px;}
+    .form-group.full{grid-column:span 2;}
+    .form-label{display:block;font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:6px;}
+    .form-input{width:100%;padding:12px 14px;border:1px solid var(--bdr);border-radius:8px;font-size:14px;outline:none;font-family:inherit;}
+    .form-input:focus{border-color:var(--or);}
+
+    .btn-save{background:var(--or);color:var(--wh);border:none;padding:12px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;}
+    .btn-save:hover{background:var(--orl);}
+
+    .plan-badge-box{display:flex;align-items:center;justify-content:space-between;background:var(--wh2);border:1px solid var(--bdr);border-radius:10px;padding:16px 20px;}
+    .btn-link{color:var(--or);font-weight:700;text-decoration:none;font-size:13.5px;}
+    .btn-link:hover{text-decoration:underline;}
+
+    @media (max-width: 768px) {
+      .nav{padding:14px 18px;}
+      .hamburger-btn { display: block; }
+      .nav-menu {
+        display: none; position: absolute; top: 70px; left: 0; width: 100%;
+        background: var(--wh); flex-direction: column; padding: 16px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-top: 1px solid var(--bdr); gap: 8px;
+      }
+      .nav-menu.open { display: flex; }
+      .nav-menu .nav-btn { width: 100%; text-align: left; padding: 12px 16px; }
+      
+      .logout-btn { display: none; }
+      .mobile-logout-btn {
+        display: block; width: 100%; background: #ffebee; border: none;
+        color: #c62828; font-size: 14px; font-weight: 700; cursor: pointer;
+        padding: 12px 16px; border-radius: 8px; text-align: left; margin-top: 8px;
+      }
+      .form-grid{grid-template-columns:1fr;}
+      .form-group.full{grid-column:span 1;}
+      .plan-badge-box{flex-direction:column;align-items:flex-start;gap:12px;}
+    }
+  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="profilApp" x-cloak>
+
+  <nav class="nav">
+    <a href="dashboard.html" class="nav-brand">
+      <div class="logo-badge"><svg viewBox="0 0 24 24"><path d="M13,2L3,14H11V22L21,10H13V2Z"/></svg></div>
+      <div class="brand-txt"><span class="brand-main">ANGOVO</span><span class="brand-sub">L'ÉNERGIE À PORTÉE DE MAIN</span></div>
+    </a>
+    
+    <button class="hamburger-btn" @click="menuOpen = !menuOpen">☰</button>
+
+    <div class="nav-menu" :class="{'open': menuOpen}">
+      <a href="dashboard.html" class="nav-btn">Tableau de bord</a>
+      <a href="facture.html" class="nav-btn">Factures</a>
+      <a href="consommation.html" class="nav-btn">Consommation</a>
+      <a href="paiement.html" class="nav-btn">Paiement</a>
+      <a href="conseil.html" class="nav-btn">Conseils</a>
+      <a href="plan.html" class="nav-btn">Plans</a>
+      <a href="profil.html" class="nav-btn active">Profil</a>
+      
+      <button @click="logout()" class="mobile-logout-btn">Déconnexion</button>
+    </div>
+
+    <div class="nav-right">
+      <div class="user-avatar" x-text="initiales">U</div>
+      <button @click="logout()" class="logout-btn">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="view-title">Mon Profil & Paramètres</h2>
+
+    <div class="card">
+      <div class="card-title">👤 Informations personnelles</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input type="text" class="form-input" x-model="user.prenom">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom</label>
+          <input type="text" class="form-input" x-model="user.nom">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" x-model="user.email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Téléphone</label>
+          <input type="text" class="form-input" x-model="user.telephone">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">N° de Compteur associé (Inséré à l'inscription)</label>
+          <input type="text" class="form-input" x-model="user.num_compteur" disabled style="background:#eee; cursor:not-allowed;">
+        </div>
+      </div>
+      <button class="btn-save" @click="sauvegarderProfil()">Enregistrer les modifications</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📦 Abonnement en cours</div>
+      <div class="plan-badge-box">
+        <div>
+          <div style="font-size:14px; font-weight:700; color:var(--blk);" x-text="'Formule : ' + currentPlan"></div>
+          <div style="font-size:12px; color:var(--t2); margin-top:2px;" x-text="currentPlan === 'Premium' ? 'Accès complet à l’assistance IA et fonctionnalités avancées (3 000 Ar/mois).' : 'Formule standard gratuite. Passez à Premium pour l’IA.'"></div>
+        </div>
+        <a href="plan.html" class="btn-link">Changer d'offre →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('profilApp', () => ({
+        menuOpen: false,
+        initiales: "U",
+        currentPlan: "Gratuit",
+        user: {
+          prenom: "",
+          nom: "",
+          email: "",
+          telephone: "",
+          num_compteur: ""
+        },
+
+        init() {
+          const savedId = localStorage.getItem('angovo_user_id');
+          if (!savedId) {
+            window.location.replace('connexion.html');
+            return;
+          }
+
+          // Récupération du plan actuel
+          const savedPlan = localStorage.getItem('angovo_user_plan');
+          if (savedPlan) {
+            this.currentPlan = savedPlan;
+          }
+
+          // Chargement des données d'inscription stockées localement ou via API
+          this.chargerDonneesInscription(savedId);
+        },
+
+        chargerDonneesInscription(userId) {
+          // 1. Vérifier si des modifications locales existent déjà
+          const savedUser = localStorage.getItem('angovo_user_data');
+          if (savedUser) {
+            this.user = JSON.parse(savedUser);
+            this.mettreAJourInitiales();
+            return;
+          }
+
+          // 2. Sinon, tentative de récupération depuis le backend (comme dans le code d'inscription)
+          fetch(`http://127.0.0.1:8000/api/dashboard/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.userProfile) {
+                this.user = {
+                  prenom: data.userProfile.prenom || "Utilisateur",
+                  nom: data.userProfile.nom || "",
+                  email: data.userProfile.email || "utilisateur@angovo.mg",
+                  telephone: data.userProfile.telephone || "034 00 000 00",
+                  num_compteur: data.userProfile.num_compteur || "CMT-1042"
+                };
+              } else {
+                // Valeurs par défaut de secours basées sur l'inscription
+                this.user = {
+                  prenom: "Rova",
+                  nom: "Jean",
+                  email: "rova.jean@angovo.mg",
+                  telephone: "034 12 345 67",
+                  num_compteur: "CMT-1042"
+                };
+              }
+              this.mettreAJourInitiales();
+            })
+            .catch(err => {
+              // Mode secours si le serveur Python/FastAPI n'est pas actif
+              this.user = {
+                prenom: "Rova",
+                nom: "Jean",
+                email: "rova.jean@angovo.mg",
+                telephone: "034 12 345 67",
+                num_compteur: "CMT-1042"
+              };
+              this.mettreAJourInitiales();
+            });
+        },
+
+        mettreAJourInitiales() {
+          if (this.user.prenom && this.user.nom) {
+            this.initiales = (this.user.prenom[0] + this.user.nom[0]).toUpperCase();
+          }
+        },
+
+        sauvegarderProfil() {
+          localStorage.setItem('angovo_user_data', JSON.stringify(this.user));
+          this.mettreAJourInitiales();
+          alert('Vos informations personnelles ont été mises à jour avec succès !');
+        },
+
+        logout() {
+          localStorage.removeItem('angovo_user_id');
+          window.location.replace('connexion.html');
+        }
+      }));
+    });
+  </script>
+</body>
+</html>

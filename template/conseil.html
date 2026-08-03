@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANGOVO — Conseils & Assistance IA</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+    *[x-cloak] { display: none !important; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --or:#E65100;--orl:#FF6D00;--orl2:#FFF3E0;
+      --gnm:#2E7D32;--gnl:#E8F5E9;
+      --blk:#0D0D0D;
+      --wh:#FFFFFF;--wh2:#F9F8F6;
+      --t1:#111111;--t2:#555555;--t3:#999999;
+      --bdr:rgba(0,0,0,0.08);
+    }
+    body{font-family:'DM Sans',system-ui,sans-serif;color:var(--t1);background:var(--wh2);min-height:100vh;}
+    
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 36px;background:var(--wh);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;}
+    .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+    .logo-badge {width: 36px; height: 36px; background: linear-gradient(135deg, #2E7D32 0%, #E65100 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;}
+    .logo-badge svg { width: 22px; height: 22px; fill: #FFFFFF; }
+    .brand-txt{display:flex;flex-direction:column;}
+    .brand-main{font-size:18px;font-weight:800;color:var(--blk);letter-spacing:0.5px;}
+    .brand-sub{font-size:8.5px;color:var(--gnm);font-weight:700;letter-spacing:0.5px;}
+
+    /* Menu desktop */
+    .nav-menu{display:flex;gap:4px;background:var(--wh2);padding:4px;border-radius:10px;border:1px solid var(--bdr);}
+    .nav-btn{background:none;border:none;padding:8px 16px;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;border-radius:7px;text-decoration:none;transition:all 0.2s;}
+    .nav-btn:hover{color:var(--t1);background:rgba(0,0,0,0.03);}
+    .nav-btn.active{color:var(--blk);background:var(--wh);font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+
+    .nav-right{display:flex;align-items:center;gap:14px;}
+    .user-avatar{width:34px;height:34px;background:var(--or);color:var(--wh);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+    
+    .logout-btn{background:none;border:1px solid var(--bdr);color:#c62828;font-size:13px;font-weight:600;cursor:pointer;padding:6px 14px;border-radius:8px;transition:0.2s;}
+    .logout-btn:hover{background:#ffebee;border-color:transparent;}
+
+    .mobile-logout-btn { display: none; }
+    .hamburger-btn { display: none; background: none; border: 1px solid var(--bdr); padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 18px; }
+
+    .container{max-width:1000px;margin:30px auto;padding:0 24px;}
+    .view-title{font-size:24px;font-weight:700;margin-bottom:8px;color:var(--blk);}
+    .view-desc{font-size:14px;color:var(--t2);margin-bottom:24px;}
+
+    .card{background:var(--wh);border:1px solid var(--bdr);border-radius:14px;padding:26px;margin-bottom:24px;}
+    .card-title{font-size:16px;font-weight:700;color:var(--blk);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+
+    /* Grille de conseils statiques (Gratuit) */
+    .tips-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:16px;}
+    .tip-item{background:var(--wh2);border:1px solid var(--bdr);border-radius:10px;padding:18px;}
+    .tip-item h4{font-size:14px;font-weight:700;color:var(--blk);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+    .tip-item p{font-size:13px;color:var(--t2);line-height:1.5;}
+
+    /* Zone Assistance IA (Premium) */
+    .ai-chat-box{background:var(--wh2);border:1px solid var(--bdr);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px;}
+    .chat-messages{background:var(--wh);border:1px solid var(--bdr);border-radius:10px;padding:16px;height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
+    .msg{padding:10px 14px;border-radius:10px;font-size:13.5px;max-width:80%;line-height:1.4;}
+    .msg.ai{background:var(--wh2);color:var(--t1);border:1px solid var(--bdr);align-self:flex-start;}
+    .msg.user{background:var(--or);color:var(--wh);align-self:flex-end;}
+    
+    .chat-input-area{display:flex;gap:10px;}
+    .chat-input{flex:1;padding:12px 14px;border:1px solid var(--bdr);border-radius:8px;font-size:14px;outline:none;font-family:inherit;}
+    .chat-input:focus{border-color:var(--or);}
+    .chat-send{background:var(--or);color:var(--wh);border:none;padding:0 20px;border-radius:8px;font-weight:700;cursor:pointer;}
+    .chat-send:hover{background:var(--orl);}
+
+    /* Bannière de verrouillage si Gratuit */
+    .lock-banner{background:var(--orl2);border:1px solid #FFE082;border-radius:10px;padding:20px;text-align:center;}
+    .lock-banner h3{color:var(--or);font-size:16px;font-weight:700;margin-bottom:6px;}
+    .lock-banner p{font-size:13.5px;color:var(--t2);margin-bottom:14px;}
+    .btn-upgrade{background:var(--or);color:var(--wh);border:none;padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;}
+
+    @media (max-width: 768px) {
+      .nav{padding:14px 18px;}
+      .hamburger-btn { display: block; }
+      .nav-menu {
+        display: none; position: absolute; top: 70px; left: 0; width: 100%;
+        background: var(--wh); flex-direction: column; padding: 16px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-top: 1px solid var(--bdr); gap: 8px;
+      }
+      .nav-menu.open { display: flex; }
+      .nav-menu .nav-btn { width: 100%; text-align: left; padding: 12px 16px; }
+      
+      .logout-btn { display: none; }
+      .mobile-logout-btn {
+        display: block; width: 100%; background: #ffebee; border: none;
+        color: #c62828; font-size: 14px; font-weight: 700; cursor: pointer;
+        padding: 12px 16px; border-radius: 8px; text-align: left; margin-top: 8px;
+      }
+      .tips-grid{grid-template-columns:1fr;}
+    }
+  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="conseilApp" x-cloak>
+
+  <nav class="nav">
+    <a href="dashboard.html" class="nav-brand">
+      <div class="logo-badge"><svg viewBox="0 0 24 24"><path d="M13,2L3,14H11V22L21,10H13V2Z"/></svg></div>
+      <div class="brand-txt"><span class="brand-main">ANGOVO</span><span class="brand-sub">L'ÉNERGIE À PORTÉE DE MAIN</span></div>
+    </a>
+    
+    <button class="hamburger-btn" @click="menuOpen = !menuOpen">☰</button>
+
+    <div class="nav-menu" :class="{'open': menuOpen}">
+      <a href="dashboard.html" class="nav-btn">Tableau de bord</a>
+      <a href="facture.html" class="nav-btn">Factures</a>
+      <a href="consommation.html" class="nav-btn">Consommation</a>
+      <a href="paiement.html" class="nav-btn">Paiement</a>
+      <a href="conseil.html" class="nav-btn active">Conseils</a>
+      <a href="plan.html" class="nav-btn">Plans</a>
+      <a href="profil.html" class="nav-btn">Profil</a>
+      
+      <button @click="logout()" class="mobile-logout-btn">Déconnexion</button>
+    </div>
+
+    <div class="nav-right">
+      <div class="user-avatar">U</div>
+      <button @click="logout()" class="logout-btn">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="view-title">Conseils & Assistance</h2>
+    <p class="view-desc">Optimisez votre consommation électrique grâce à nos recommandations et notre assistant intelligent.</p>
+
+    <div class="card">
+      <div class="card-title">💡 Conseils d'experts (Accès Libre)</div>
+      <div class="tips-grid">
+        <div class="tip-item">
+          <h4>❄️ Gestion du Climatiseur</h4>
+          <p>Réglez votre climatiseur à une température stable (24°C-26°C). Chaque degré en moins augmente la consommation de 7%.</p>
+        </div>
+        <div class="tip-item">
+          <h4>🔌 Veille des appareils</h4>
+          <p>Débranchez les chargeurs et appareils non utilisés. Les équipements en veille représentent près de 10% de la facture.</p>
+        </div>
+        <div class="tip-item">
+          <h4>💡 Éclairage LED</h4>
+          <p>Privilégiez les ampoules LED qui consomment jusqu'à 80% d'énergie en moins que les ampoules à incandescence traditionnelles.</p>
+        </div>
+        <div class="tip-item">
+          <h4>☀️ Utilisation intelligente</h4>
+          <p>Faites fonctionner vos gros appareils électroménagers (lave-linge, chauffe-eau) de préférence aux heures creuses.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🤖 Assistant IA Angovo (Réservé Premium)</div>
+
+      <template x-if="isPremium">
+        <div class="ai-chat-box">
+          <div class="chat-messages" id="chatContainer">
+            <template x-for="msg in messages">
+              <div class="msg" :class="msg.sender" x-text="msg.text"></div>
+            </template>
+          </div>
+          <div class="chat-input-area">
+            <input type="text" class="chat-input" placeholder="Posez une question à votre IA (ex: Pourquoi ma facture a augmenté ?)" x-model="inputMessage" @keyup.enter="sendMessage()">
+            <button class="chat-send" @click="sendMessage()">Envoyer</button>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="!isPremium">
+        <div class="lock-banner">
+          <h3>🔒 Fonctionnalité réservée aux abonnés Premium</h3>
+          <p>Obtenez des analyses personnalisées en temps réel de votre compteur, des prédictions de factures et des réponses sur-mesure grâce à l'IA.</p>
+          <a href="plan.html" class="btn-upgrade">Passer à l'offre Premium</a>
+        </div>
+      </template>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('conseilApp', () => ({
+        menuOpen: false,
+        isPremium: false, // Basculera à true si l'utilisateur a pris l'abonnement Premium
+        inputMessage: '',
+        messages: [
+          { sender: 'ai', text: 'Bonjour ! Je suis votre assistant énergétique IA Angovo. Comment puis-je vous aider à optimiser votre consommation ce mois-ci ?' }
+        ],
+
+        init() {
+          if (!localStorage.getItem('angovo_user_id')) {
+            window.location.replace('connexion.html');
+            return;
+          }
+
+          // Vérification du plan stocké (ex: si le plan actif est Premium)
+          const currentPlan = localStorage.getItem('angovo_user_plan') || 'Standard';
+          if (currentPlan === 'Premium') {
+            this.isPremium = true;
+          }
+        },
+
+        sendMessage() {
+          if (!this.inputMessage.trim()) return;
+          
+          // Ajout du message utilisateur
+          this.messages.push({ sender: 'user', text: this.inputMessage });
+          const userQuery = this.inputMessage;
+          this.inputMessage = '';
+
+          // Scroll automatique vers le bas
+          setTimeout(() => {
+            const container = document.getElementById('chatContainer');
+            if(container) container.scrollTop = container.scrollHeight;
+          }, 50);
+
+          // Simulation de réponse IA
+          setTimeout(() => {
+            let reponseIA = "D'après l'analyse de votre compteur CMT-1042, votre pic de consommation récent est lié à vos appareils de chauffage/refroidissement.";
+            if (userQuery.toLowerCase().includes('facture')) {
+              reponseIA = "Votre facture actuelle est estimée à 48 200 Ar pour 187 kWh. C'est 13% de plus que le mois dernier en raison d'une utilisation accrue en soirée.";
+            }
+            this.messages.push({ sender: 'ai', text: reponseIA });
+            
+            setTimeout(() => {
+              const container = document.getElementById('chatContainer');
+              if(container) container.scrollTop = container.scrollHeight;
+            }, 50);
+          }, 1000);
+        },
+
+        logout() {
+          localStorage.removeItem('angovo_user_id');
+          window.location.replace('connexion.html');
+        }
+      }));
+    });
+  </script>
+</body>
+</html>
