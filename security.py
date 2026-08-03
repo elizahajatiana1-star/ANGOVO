@@ -2,6 +2,7 @@ import re
 from fastapi import HTTPException
 from passlib.context import CryptContext
 
+# Initialisation du contexte de hachage
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def valider_mot_de_passe_fort(password: str):
@@ -11,7 +12,7 @@ def valider_mot_de_passe_fort(password: str):
     - Au moins une lettre majuscule
     - Au moins une lettre minuscule
     - Au moins un chiffre
-    - Au moins un caractère spécial parmi @$!%*?&_
+    - Au moins un caractère spécial parmi @$!%*?&_#
     """
     if len(password) < 8:
         raise HTTPException(
@@ -40,7 +41,13 @@ def valider_mot_de_passe_fort(password: str):
         )
 
 def hacher_mot_de_passe(password: str) -> str:
+    # Sécurité : bcrypt n'accepte pas plus de 72 octets
+    if len(password.encode('utf-8')) > 72:
+        password = password[:72]
     return pwd_context.hash(password)
 
-def verifier_mot_de_passe(password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(password, hashed_password)
+def verifier_mot_de_passe(plain_password: str, hashed_password: str) -> bool:
+    # Sécurité : troncature identique pour la vérification
+    if len(plain_password.encode('utf-8')) > 72:
+        plain_password = plain_password[:72]
+    return pwd_context.verify(plain_password, hashed_password)
