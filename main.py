@@ -37,7 +37,8 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/")
 def lire_accueil(request: Request):
     """Affiche automatiquement index.html à l'ouverture de l'URL principale"""
-    return templates.TemplateResponse("index.html", {"request": request})
+    # CORRECTION ICI : 'request' doit être le premier argument obligatoire
+    return templates.TemplateResponse(request, "index.html", {})
 
 
 # ==========================================
