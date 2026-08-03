@@ -41,9 +41,15 @@ def valider_mot_de_passe_fort(password: str):
         )
 
 def hacher_mot_de_passe(password: str) -> str:
-    # Sécurité : bcrypt n'accepte pas plus de 72 octets
-    if len(password.encode('utf-8')) > 72:
-        password = password[:72]
+    # Sécurité absolue : si le mot de passe est vide ou n'est pas une chaîne
+    if not password or not isinstance(password, str):
+        raise HTTPException(status_code=400, detail="Le mot de passe est invalide.")
+    
+    # Tronquer automatiquement à 72 octets max pour éviter l'erreur bcrypt
+    password_bytes = password.encode('utf-8')
+    if len(password_bytes) > 72:
+        password = password_bytes[:72].decode('utf-8', errors='ignore')
+        
     return pwd_context.hash(password)
 
 def verifier_mot_de_passe(plain_password: str, hashed_password: str) -> bool:
