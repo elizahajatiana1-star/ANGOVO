@@ -85,15 +85,20 @@ class UserLogin(BaseModel):
 
 @app.post("/api/register")
 def register_user(user: UserRegister):
-    security.valider_mot_de_passe_fort(user.password)
-    
-    if database.verifier_email_existe(user.email):
-        raise HTTPException(status_code=400, detail="Cet email est déjà utilisé.")
+    try:
+        security.valider_mot_de_passe_fort(user.password)
         
-    hashed = security.hacher_mot_de_passe(user.password)
-    id_user = database.inserer_nouvel_utilisateur(user, hashed)
+        if database.verifier_email_existe(user.email):
+            raise HTTPException(status_code=400, detail="Cet email est déjà utilisé.")
+            
+        hashed = security.hacher_mot_de_passe(user.password)
+        id_user = database.inserer_nouvel_utilisateur(user, hashed)
+        
+        return {"success": True, "message": "Utilisateur créé avec succès !", "user_id": id_user}
     
-    return {"success": True, "message": "Utilisateur créé avec succès !", "user_id": id_user}
+    except Exception as e:
+        # CIGARETTE MAGIQUE : Ceci va renvoyer la vraie erreur technique le site web
+        raise HTTPException(status_code=500, detail=f"ERREUR EXACTE : {str(e)}")
 
 @app.post("/api/login")
 def login_user(user: UserLogin):
