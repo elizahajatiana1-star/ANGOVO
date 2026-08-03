@@ -50,6 +50,7 @@ def page_inscription(request: Request):
     return templates.TemplateResponse(request, "inscription.html", {})
 
 
+
 # ==========================================
 # 2. MODÈLES PYDANTIC (Validation des données)
 # ==========================================
