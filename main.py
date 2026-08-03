@@ -54,6 +54,30 @@ def page_inscription(request: Request):
 def page_dashboard(request: Request):
     return templates.TemplateResponse(request, "dashboard.html", {})
 
+@app.get("/consommation")
+def page_dashboard(request: Request):
+    return templates.TemplateResponse(request, "consommation.html", {})
+
+@app.get("/conseil")
+def page_dashboard(request: Request):
+    return templates.TemplateResponse(request, "conseil.html", {})
+
+@app.get("/facture")
+def page_dashboard(request: Request):
+    return templates.TemplateResponse(request, "facture.html", {})
+
+@app.get("/paiement")
+def page_dashboard(request: Request):
+    return templates.TemplateResponse(request, "paiement.html", {})
+
+@app.get("/plan")
+def page_dashboard(request: Request):
+    return templates.TemplateResponse(request, "plan.html", {})
+
+@app.get("/profil")
+def page_dashboard(request: Request):
+    return templates.TemplateResponse(request, "profil.html", {})
+
 # ==========================================
 # 2. MODÈLES PYDANTIC (Validation des données)
 # ==========================================

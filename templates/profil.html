@@ -87,7 +87,7 @@
 <body x-data="profilApp" x-cloak>
 
   <nav class="nav">
-    <a href="dashboard.html" class="nav-brand">
+    <a href="/dashboard" class="nav-brand">
       <div class="logo-badge"><svg viewBox="0 0 24 24"><path d="M13,2L3,14H11V22L21,10H13V2Z"/></svg></div>
       <div class="brand-txt"><span class="brand-main">ANGOVO</span><span class="brand-sub">L'ÉNERGIE À PORTÉE DE MAIN</span></div>
     </a>
@@ -95,13 +95,13 @@
     <button class="hamburger-btn" @click="menuOpen = !menuOpen">☰</button>
 
     <div class="nav-menu" :class="{'open': menuOpen}">
-      <a href="dashboard.html" class="nav-btn">Tableau de bord</a>
-      <a href="facture.html" class="nav-btn">Factures</a>
-      <a href="consommation.html" class="nav-btn">Consommation</a>
-      <a href="paiement.html" class="nav-btn">Paiement</a>
-      <a href="conseil.html" class="nav-btn">Conseils</a>
-      <a href="plan.html" class="nav-btn">Plans</a>
-      <a href="profil.html" class="nav-btn active">Profil</a>
+      <a href="/dashboard" class="nav-btn">Tableau de bord</a>
+      <a href="/facture" class="nav-btn">Factures</a>
+      <a href="/consommation" class="nav-btn">Consommation</a>
+      <a href="/paiement" class="nav-btn">Paiement</a>
+      <a href="/conseil" class="nav-btn active">Conseils</a>
+      <a href="/plan" class="nav-btn">Plans</a>
+      <a href="/profil" class="nav-btn">Profil</a>
       
       <button @click="logout()" class="mobile-logout-btn">Déconnexion</button>
     </div>
@@ -149,7 +149,7 @@
           <div style="font-size:14px; font-weight:700; color:var(--blk);" x-text="'Formule : ' + currentPlan"></div>
           <div style="font-size:12px; color:var(--t2); margin-top:2px;" x-text="currentPlan === 'Premium' ? 'Accès complet à l’assistance IA et fonctionnalités avancées (3 000 Ar/mois).' : 'Formule standard gratuite. Passez à Premium pour l’IA.'"></div>
         </div>
-        <a href="plan.html" class="btn-link">Changer d'offre →</a>
+        <a href="/plan" class="btn-link">Changer d'offre →</a>
       </div>
     </div>
 
@@ -172,7 +172,7 @@
         init() {
           const savedId = localStorage.getItem('angovo_user_id');
           if (!savedId) {
-            window.location.replace('connexion.html');
+            window.location.replace('/connexion');
             return;
           }
 
@@ -186,7 +186,7 @@
           this.chargerDonneesInscription(savedId);
         },
 
-        chargerDonneesInscription(userId) {
+       chargerDonneesInscription(userId) {
           // 1. Vérifier si des modifications locales existent déjà
           const savedUser = localStorage.getItem('angovo_user_data');
           if (savedUser) {
@@ -195,8 +195,8 @@
             return;
           }
 
-          // 2. Sinon, tentative de récupération depuis le backend (comme dans le code d'inscription)
-          fetch(`http://127.0.0.1:8000/api/dashboard/${userId}`)
+          // 2. CORRECTION : Utilisation de l'URL relative pour Render
+          fetch(`/api/dashboard/${userId}`)
             .then(res => res.json())
             .then(data => {
               if (data && data.userProfile) {
@@ -208,7 +208,6 @@
                   num_compteur: data.userProfile.num_compteur || "CMT-1042"
                 };
               } else {
-                // Valeurs par défaut de secours basées sur l'inscription
                 this.user = {
                   prenom: "Rova",
                   nom: "Jean",
@@ -220,7 +219,6 @@
               this.mettreAJourInitiales();
             })
             .catch(err => {
-              // Mode secours si le serveur Python/FastAPI n'est pas actif
               this.user = {
                 prenom: "Rova",
                 nom: "Jean",
@@ -246,7 +244,7 @@
 
         logout() {
           localStorage.removeItem('angovo_user_id');
-          window.location.replace('connexion.html');
+          window.location.replace('/connexion');
         }
       }));
     });

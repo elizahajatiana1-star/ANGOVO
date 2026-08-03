@@ -92,21 +92,21 @@
 <body x-data="planApp" x-cloak>
 
   <nav class="nav">
-    <a href="dashboard.html" class="nav-brand">
+    <a href="/dashboard" class="nav-brand">
       <div class="logo-badge"><svg viewBox="0 0 24 24"><path d="M13,2L3,14H11V22L21,10H13V2Z"/></svg></div>
       <div class="brand-txt"><span class="brand-main">ANGOVO</span><span class="brand-sub">L'ÉNERGIE À PORTÉE DE MAIN</span></div>
     </a>
     
     <button class="hamburger-btn" @click="menuOpen = !menuOpen">☰</button>
 
-    <div class="nav-menu" :class="{'open': menuOpen}">
-      <a href="dashboard.html" class="nav-btn">Tableau de bord</a>
-      <a href="facture.html" class="nav-btn">Factures</a>
-      <a href="consommation.html" class="nav-btn">Consommation</a>
-      <a href="paiement.html" class="nav-btn">Paiement</a>
-      <a href="conseil.html" class="nav-btn">Conseils</a>
-      <a href="plan.html" class="nav-btn active">Plans</a>
-      <a href="profil.html" class="nav-btn">Profil</a>
+     <div class="nav-menu" :class="{'open': menuOpen}">
+      <a href="/dashboard" class="nav-btn">Tableau de bord</a>
+      <a href="/facture" class="nav-btn">Factures</a>
+      <a href="/consommation" class="nav-btn">Consommation</a>
+      <a href="/paiement" class="nav-btn">Paiement</a>
+      <a href="/conseil" class="nav-btn active">Conseils</a>
+      <a href="/plan" class="nav-btn">Plans</a>
+      <a href="/profil" class="nav-btn">Profil</a>
       
       <button @click="logout()" class="mobile-logout-btn">Déconnexion</button>
     </div>
@@ -180,7 +180,7 @@
 
         logout() {
           localStorage.removeItem('angovo_user_id');
-          window.location.replace('connexion.html');
+          window.location.replace('/connexion');
         }
       }));
     });
