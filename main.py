@@ -145,9 +145,9 @@ def get_dashboard_data(user_id: int):
         if he.status_code == 404:
             return {
                 "userProfile": {
-                    "prenom": "Client",
-                    "nom": "Angovo",
-                    "email": "client@angovo.mg",
+                    "prenom": "hajatiana ",
+                    "nom": "eliza",
+                    "email": "hajatianaeliza@gmail.com",
                     "plan_actuel": "Plan Standard",
                     "num_compteur": "457-JIR-MADA"
                 },
