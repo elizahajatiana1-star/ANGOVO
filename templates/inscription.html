@@ -70,7 +70,7 @@
             </div>
           </div>
           <div class="footer-actions">
-            <a href="connexion.html" style="color:var(--t3); font-size:14px; font-weight:600; text-decoration:none;">Annuler et se connecter</a>
+            <a href="/connexion" style="color:var(--t3); font-size:14px; font-weight:600; text-decoration:none;">Annuler et se connecter</a>
             <button type="submit" class="f-btn">Finaliser l'inscription</button>
           </div>
         </form>
@@ -84,15 +84,29 @@
         init() { initLogo(); initParticles(); },
         submitRegister() {
           const payload = { nom: this.nom, prenom: this.prenom, email: this.email, password: this.password, telephone: this.telephone, date_naissance: this.date_naissance || null, ville: this.ville, quartier: this.quartier, adresse_exacte: this.adresse_exacte, num_compteur: this.num_compteur, type_abonnement: this.type_abonnement, plan: this.plan, choix_kwh_base: parseInt(this.choix_kwh_base) || 0 };
-          fetch('http://127.0.0.1:8000/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-          .then(async res => { const data = await res.json(); if (!res.ok) throw data; return data; })
-          .then(() => { alert("Votre compte a été créé avec succès ! Connectez-vous."); window.location.href = 'connexion.html'; })
-          .catch(err => { alert("Erreur d'inscription : " + (err.detail || "Veuillez vérifier les champs.")); });
+          
+          // CORRECTION : URL relative '/api/register' pour fonctionner partout (local et Render)
+          fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+          .then(async res => { 
+              const data = await res.json(); 
+              if (!res.ok) throw data; 
+              return data; 
+          })
+          .then(() => { 
+              alert("Votre compte a été créé avec succès ! Connectez-vous."); 
+              window.location.href = '/connexion'; // CORRECTION : Redirection vers la route propre
+          })
+          .catch(err => { 
+              // Affichage du vrai message d'erreur si le serveur refuse l'inscription
+              const errMsg = err.detail || (typeof err === 'string' ? err : "Veuillez vérifier les champs.");
+              alert("Erreur d'inscription : " + errMsg); 
+          });
         }
       }
     }
     function initLogo() { const cvs = document.getElementById('logoCanvas'); if(!cvs) return; cvs.width = 76; cvs.height = 76; const ctx = cvs.getContext('2d'); ctx.strokeStyle = '#1B5E20'; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(16,46,14,24); ctx.stroke(); ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(20,36,24,14); ctx.stroke(); ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(60,46,62,24); ctx.stroke(); ctx.beginPath(); ctx.moveTo(38,62); ctx.quadraticCurveTo(56,36,52,14); ctx.stroke(); ctx.beginPath(); ctx.moveTo(38,66); ctx.lineTo(38,10); ctx.stroke(); ctx.fillStyle = '#E65100'; ctx.beginPath(); ctx.moveTo(38,24); ctx.lineTo(45,36); ctx.lineTo(39,36); ctx.lineTo(41,48); ctx.lineTo(31,34); ctx.lineTo(37,34); ctx.closePath(); ctx.fill(); }
     function initParticles() { const C = document.getElementById('ptc'); if(!C) return; const ctx = C.getContext('2d'); let W, H, pts; function resize() { W = C.width = window.innerWidth; H = C.height = window.innerHeight; } window.addEventListener('resize', resize); resize(); pts = Array.from({length: 20}, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, r: 1.5, c: Math.random() > 0.5 ? '#E65100' : '#2E7D32' })); function loop() { ctx.clearRect(0, 0, W, H); pts.forEach(p => { p.x += p.vx; p.y += p.vy; if(p.x < 0 || p.x > W) p.vx *= -1; if(p.y < 0 || p.y > H) p.vy *= -1; ctx.beginPath(); ctx.fillStyle = p.c; ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); requestAnimationFrame(loop); } loop(); }
   </script>
-</body>
+    
+  </body>
 </html>
