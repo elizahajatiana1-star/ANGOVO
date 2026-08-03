@@ -50,6 +50,9 @@ def page_inscription(request: Request):
     return templates.TemplateResponse(request, "inscription.html", {})
 
 
+@app.get("/dashboard")
+def page_dashboard(request: Request):
+    return templates.TemplateResponse(request, "dashboard.html", {})
 
 # ==========================================
 # 2. MODÈLES PYDANTIC (Validation des données)
