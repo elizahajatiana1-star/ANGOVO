@@ -1,9 +1,9 @@
 fastapi
 uvicorn
-mysql-connector-python
 pydantic
 pydantic-settings
 email-validator
 passlib
 bcrypt
 jinja2
+starlette
