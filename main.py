@@ -90,6 +90,11 @@ def register_user(user: UserRegister):
     
     return {"success": True, "message": "Utilisateur créé avec succès !", "user_id": id_user}
 
+@app.get("/connexion")
+def page_connexion(request: Request):
+    """Affiche la page de connexion"""
+    return templates.TemplateResponse(request, "connexion.html", {})
+
 @app.post("/api/login")
 def login_user(user: UserLogin):
     db_user = database.recuperer_utilisateur_par_email(user.email)
