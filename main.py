@@ -37,8 +37,17 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/")
 def lire_accueil(request: Request):
     """Affiche automatiquement index.html à l'ouverture de l'URL principale"""
-    # CORRECTION ICI : 'request' doit être le premier argument obligatoire
     return templates.TemplateResponse(request, "index.html", {})
+
+@app.get("/connexion")
+def page_connexion(request: Request):
+    """Affiche la page de connexion"""
+    return templates.TemplateResponse(request, "connexion.html", {})
+
+@app.get("/inscription")
+def page_inscription(request: Request):
+    """Affiche la page de création de compte"""
+    return templates.TemplateResponse(request, "inscription.html", {})
 
 
 # ==========================================
@@ -60,7 +69,6 @@ class UserRegister(BaseModel):
     plan: str
     choix_kwh_base: Optional[int] = 0
 
-    # Nettoyage automatique des dates vides générées par les inputs HTML
     @field_validator('date_naissance', mode='before')
     @classmethod
     def empty_str_to_none(cls, v):
@@ -77,23 +85,15 @@ class UserLogin(BaseModel):
 
 @app.post("/api/register")
 def register_user(user: UserRegister):
-    # 1. Exécution de l'algorithme de contrôle de sécurité informatique
     security.valider_mot_de_passe_fort(user.password)
     
-    # 2. Contrôle de l'existence de l'email en BDD
     if database.verifier_email_existe(user.email):
         raise HTTPException(status_code=400, detail="Cet email est déjà utilisé.")
         
-    # 3. Hachage sécurisé et traitement transactionnel SQL
     hashed = security.hacher_mot_de_passe(user.password)
     id_user = database.inserer_nouvel_utilisateur(user, hashed)
     
     return {"success": True, "message": "Utilisateur créé avec succès !", "user_id": id_user}
-
-@app.get("/connexion")
-def page_connexion(request: Request):
-    """Affiche la page de connexion"""
-    return templates.TemplateResponse(request, "connexion.html", {})
 
 @app.post("/api/login")
 def login_user(user: UserLogin):
